@@ -414,11 +414,11 @@ ONEC_API_TOKEN=your_token
 
 ---
 
-## 📚 Документация
+## 📚 Документация.
 
 | Документ | Описание |
 |----------|----------|
-| [📋 Коммерческое предложение](docs/COMMERCIAL_PROPOSAL.md) | Для заказчиков |
+| [📋 Коммерческое предложение](docs/COMMERCIAL_PROPOSAL.md) | Для заказчиков. |
 | [📐 Архитектура](docs/ARCHITECTURE.md) | Техническая архитектура |
 | [📝 Требования](docs/REQUIREMENTS.md) | Функциональные требования |
 | [🔌 API Reference](docs/API_REFERENCE.md) | REST API |
