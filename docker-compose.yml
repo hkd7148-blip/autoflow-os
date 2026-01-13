@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  bot:
+    build: .
+    container_name: autoflow-bot
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - DATABASE_URL=postgresql://autoflow:${POSTGRES_PASSWORD:-autoflow}@db:5432/autoflow_db
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      db: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    networks: [autoflow-network]
+    command: python -m src.bot
+
+  api:
+    build: .
+    container_name: autoflow-api
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - DATABASE_URL=postgresql://autoflow:${POSTGRES_PASSWORD:-autoflow}@db:5432/autoflow_db
+      - REDIS_URL=redis://redis:6379/0
+    ports: ["${API_PORT:-8000}:8000"]
+    depends_on:
+      db: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    volumes:
+      - ./data:/app/data
+    networks: [autoflow-network]
+    command: uvicorn src.api.main:app --host 0.0.0.0 --port 8000
+
+  db:
+    image: postgres:15-alpine
+    container_name: autoflow-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=autoflow
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-autoflow}
+      - POSTGRES_DB=autoflow_db
+    volumes: [postgres_data:/var/lib/postgresql/data]
+    ports: ["${POSTGRES_PORT:-5432}:5432"]
+    networks: [autoflow-network]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U autoflow -d autoflow_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: autoflow-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes: [redis_data:/data]
+    ports: ["${REDIS_PORT:-6379}:6379"]
+    networks: [autoflow-network]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  autoflow-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
