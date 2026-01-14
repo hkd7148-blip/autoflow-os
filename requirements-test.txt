@@ -1,0 +1,48 @@
+# Тестовые зависимости для AUTOFLOW OS
+
+# Основные зависимости для тестирования
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+pytest-mock==3.12.0
+pytest-timeout==2.2.0
+
+# Для мокирования
+unittest-mock==1.5.0
+
+# Для асинхронного тестирования
+asyncio==3.4.3
+aiohttp==3.9.1
+
+# Покрытие кода
+coverage[toml]==7.3.2
+
+# Статический анализ (опционально)
+pylint==3.0.3
+mypy==1.7.1
+black==23.12.0
+flake8==6.1.0
+isort==5.13.2
+
+# Faker для генерации тестовых данных
+Faker==20.1.0
+
+# Freezegun для работы с временем в тестах
+freezegun==1.4.0
+
+# Responses для мокирования HTTP запросов
+responses==0.24.1
+
+# Factory Boy для создания тестовых объектов
+factory-boy==3.3.0
+
+# Основные зависимости проекта (для импортов)
+aiogram==3.2.0
+openai==1.6.0
+langchain==0.1.0
+langchain-openai==0.0.2
+python-dotenv==1.0.0
+asyncpg==0.29.0
+redis==5.0.1
+pydantic==2.5.2
+httpx==0.25.2
